@@ -99,10 +99,12 @@ class ExecutionState implements ExecutionStateInterface {
    * {@inheritdoc}
    */
   public function getVariable($name) {
-    if (!$this->hasVariable($name)) {
-      throw new EvaluationException("Unable to get variable $name, it is not defined.");
+    try {
+      return $this->variables[$name];
     }
-    return $this->variables[$name];
+    catch (InvalidArgumentException $e) {
+      throw new EvaluationException($e->getMessage(), 0, $e);
+    }
   }
 
   /**
